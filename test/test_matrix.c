@@ -1,15 +1,26 @@
 #include <CUnit/Basic.h>
 #include <CUnit/Console.h>
 #include <CUnit/Automated.h>
+#include "../src/linear/matrix.h"
 
-int init_suite_success(void) { return 0; }
-int init_suite_failure(void) { return -1; }
-int clean_suite_success(void) { return 0; }
-int clean_suite_failure(void) { return -1; }
+static c_matrix *m = NULL;
 
-void test_success1(void)
-{
-	CU_ASSERT(1);
+int init_matrix_suite(void) { 
+	m = new_c_matrix(2, 4);
+	if(NULL == m)
+		return -1;
+	else
+		return 0;
+}
+
+int clean_matrix_suite(void) {
+	del_c_matrix(m);
+	return 0;
+}
+
+void test_matrix_initialize() {
+	CU_ASSERT(2 == m->n);
+	CU_ASSERT(4 == m->m);
 }
 
 int main() {
@@ -20,14 +31,14 @@ int main() {
 		return CU_get_error();
 
 	/* add a test suite to the registry */
-	pSuite = CU_add_suite("Suite_success", init_suite_success, clean_suite_success);
+	pSuite = CU_add_suite("Matrix_suite", init_matrix_suite, clean_matrix_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
 
 	/* add the tests to the suite */
-	if((NULL == CU_add_test(pSuite, "successful_test_1", test_success1))) {
+	if((NULL == CU_add_test(pSuite, "Test_matrix_initialize", test_matrix_initialize))) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
