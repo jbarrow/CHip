@@ -112,3 +112,75 @@ void c_matrix_add(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	cudaFree( d_b );
 	cudaFree( d_c );
 }
+
+/*	Subtract two matrices and store the result in a third */
+extern "C"
+void c_matrix_sub(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
+	if(m1->m != m2->m || m1->n != m2->n || m1->m != m->m
+		|| m1->n != m2->n)
+		exit(EXIT_FAILURE);
+
+	double *d_a, *d_b, *d_c;
+	handle_error( cudaMalloc((void**)&d_a, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_b, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_c, m1->m * m1->n * sizeof(double)) );
+
+	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
+	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
+
+	cu_matrix_sub<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+
+	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
+
+	cudaFree( d_a );
+	cudaFree( d_b );
+	cudaFree( d_c );
+}
+
+/*	Element-wise multiply two matrices and store the result in a third */
+extern "C"
+void c_element_mul(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
+	if(m1->m != m2->m || m1->n != m2->n || m1->m != m->m
+		|| m1->n != m2->n)
+		exit(EXIT_FAILURE);
+
+	double *d_a, *d_b, *d_c;
+	handle_error( cudaMalloc((void**)&d_a, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_b, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_c, m1->m * m1->n * sizeof(double)) );
+
+	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
+	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
+
+	cu_element_mul<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+
+	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
+
+	cudaFree( d_a );
+	cudaFree( d_b );
+	cudaFree( d_c );
+}
+
+/*	Element-wise divide two matrices and store the result in a third */
+extern "C"
+void c_element_div(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
+	if(m1->m != m2->m || m1->n != m2->n || m1->m != m->m
+		|| m1->n != m2->n)
+		exit(EXIT_FAILURE);
+
+	double *d_a, *d_b, *d_c;
+	handle_error( cudaMalloc((void**)&d_a, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_b, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_c, m1->m * m1->n * sizeof(double)) );
+
+	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
+	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
+
+	cu_element_div<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+
+	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
+
+	cudaFree( d_a );
+	cudaFree( d_b );
+	cudaFree( d_c );
+}

@@ -52,6 +52,30 @@ void test_matrix_add() {
 		CU_ASSERT_DOUBLE_EQUAL(2.0, m->data[i], 0.000000000001);
 }
 
+void test_matrix_sub() {
+	ones(m);
+	c_matrix_sub(m, m, m);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT_DOUBLE_EQUAL(0.0, m->data[i], 0.000000000001);
+}
+
+void test_element_mul() {
+	ones(m);
+	c_element_mul(m, m, m);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT_DOUBLE_EQUAL(1.0, m->data[i], 0.000000000001);
+}
+
+void test_element_div() {
+	ones(m);
+	c_element_div(m, m, m);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT_DOUBLE_EQUAL(1.0, m->data[i], 0.000000000001);
+}
+
 int main() {
 	CU_pSuite pSuite = NULL;
 
@@ -71,7 +95,10 @@ int main() {
 		(NULL == CU_add_test(pSuite, "Test matrix set", test_matrix_set)) ||
 		(NULL == CU_add_test(pSuite, "Test matrix zeros", test_matrix_zeros)) ||
 		(NULL == CU_add_test(pSuite, "Test matrix ones", test_matrix_ones)) ||
-		(NULL == CU_add_test(pSuite, "Test matrix addition", test_matrix_add))) {
+		(NULL == CU_add_test(pSuite, "Test matrix addition", test_matrix_add)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix addition", test_matrix_sub)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix addition", test_element_mul)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix addition", test_element_div))) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
