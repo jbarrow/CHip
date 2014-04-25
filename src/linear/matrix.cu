@@ -5,6 +5,9 @@ extern "C" {
 	#include "matrix.h"
 }
 
+__global__ void cu_matrix_add(const double *d_a, const double *d_b, double *d_c, int element_count);
+static void handleError( cudaError_t err, const char *file, int line );
+
 extern "C"
 c_matrix *new_c_matrix(int i, int j) {
 	c_matrix *m = (c_matrix *)malloc(sizeof(*m));
@@ -92,7 +95,20 @@ void c_matrix_add(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	if(m1->m != m2->m || m1->n != m2->n || m1->m != m->m
 		|| m1->n != m2->n)
 		exit(EXIT_FAILURE);
-	int i;
-	for(i = 0; i < m1->m * m1->n; ++i)
-		m->data[i] = m1->data[i] + m2->data[i];
+
+	double *d_a, *d_b, *d_c;
+	handle_error( cudaMalloc((void**)&d_a, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_b, m1->m * m1->n * sizeof(double)) );
+	handle_error( cudaMalloc((void**)&d_c, m1->m * m1->n * sizeof(double)) );
+
+	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
+	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
+
+	cu_matrix_add<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+
+	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
+
+	cudaFree( d_a );
+	cudaFree( d_b );
+	cudaFree( d_c );
 }

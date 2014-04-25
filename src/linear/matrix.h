@@ -9,6 +9,9 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#define handle_error( err ) ( handleError( err, __FILE__, __LINE__ ) )
+#define min(x, y) (x < y ? x : y)
+
 typedef struct {
 	int n, m; /* Define an n-rows by m-columns matrix */
 	double* data; /* Data stored in row-major form */

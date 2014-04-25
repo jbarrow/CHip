@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 /*
  *  Code provided by NVidia to be able to handle atomic adds
  *  for double-precision floating point numbers
@@ -14,4 +16,17 @@ __device__ double atomicAdd(double* address, double val)
                         __longlong_as_double(assumed)));
     } while (assumed != old);
     return __longlong_as_double(old);
+}
+
+__global__ void cu_matrix_add(const double *d_a, const double *d_b, double *d_c, int element_count) {
+    unsigned short tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if( tid < element_count)
+        d_c[tid] = d_a[tid] + d_b[tid];
+}
+
+static void handleError( cudaError_t err, const char* file, int line ) {
+    if(err != cudaSuccess) {
+        printf("%s (%d): %s", file, line, cudaGetErrorString(err));
+        exit( EXIT_FAILURE );
+    }
 }
