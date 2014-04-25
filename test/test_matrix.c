@@ -19,8 +19,27 @@ int clean_matrix_suite(void) {
 }
 
 void test_matrix_initialize() {
+	/*	we're going to start checking if the size is properly
+		set, as there is no data */
 	CU_ASSERT(2 == m->n);
 	CU_ASSERT(4 == m->m);
+}
+
+void test_matrix_set() {
+	c_matrix_set(m, 1, 1, 2.0);
+	CU_ASSERT(2.0 == m->data[0]);
+}
+
+void test_matrix_zeros() {
+	zeros(m);
+	CU_ASSERT(0.0 == m->data[0]);
+	CU_ASSERT(0.0 == m->data[7]);
+}
+
+void test_matrix_ones() {
+	ones(m);
+	CU_ASSERT(1.0 == m->data[0]);
+	CU_ASSERT(1.0 == m->data[7]);
 }
 
 int main() {
@@ -38,7 +57,10 @@ int main() {
 	}
 
 	/* add the tests to the suite */
-	if((NULL == CU_add_test(pSuite, "Test_matrix_initialize", test_matrix_initialize))) {
+	if((NULL == CU_add_test(pSuite, "Test_matrix_initialize", test_matrix_initialize)) || 
+		(NULL == CU_add_test(pSuite, "Test_matrix_set", test_matrix_set)) ||
+		(NULL == CU_add_test(pSuite, "Test_matrix_zeros", test_matrix_zeros)) ||
+		(NULL == CU_add_test(pSuite, "Test_matrix_ones", test_matrix_ones))) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

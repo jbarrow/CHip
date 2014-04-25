@@ -19,8 +19,8 @@ typedef struct {
 c_matrix *new_c_matrix(int i, int j);
 void del_c_matrix(c_matrix* m);
 
-double c_matrix_get(int i, int j);
-void c_matrix_set(int i, int j, double val);
+double c_matrix_get(c_matrix *m, int i, int j);
+void c_matrix_set(c_matrix *m, int i, int j, double val);
 
 void zeros(c_matrix* m);
 void ones(c_matrix* m);
