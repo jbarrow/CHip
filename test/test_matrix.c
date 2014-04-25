@@ -32,14 +32,24 @@ void test_matrix_set() {
 
 void test_matrix_zeros() {
 	zeros(m);
-	CU_ASSERT(0.0 == m->data[0]);
-	CU_ASSERT(0.0 == m->data[7]);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT(0.0 == m->data[i]);
 }
 
 void test_matrix_ones() {
 	ones(m);
-	CU_ASSERT(1.0 == m->data[0]);
-	CU_ASSERT(1.0 == m->data[7]);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT(1.0 == m->data[i]);
+}
+
+void test_matrix_add() {
+	ones(m);
+	c_matrix_add(m, m, m);
+	int i;
+	for(i = 0; i < 8; ++i)
+		CU_ASSERT_DOUBLE_EQUAL(2.0, m->data[i], 0.000000000001);
 }
 
 int main() {
@@ -57,10 +67,11 @@ int main() {
 	}
 
 	/* add the tests to the suite */
-	if((NULL == CU_add_test(pSuite, "Test_matrix_initialize", test_matrix_initialize)) || 
-		(NULL == CU_add_test(pSuite, "Test_matrix_set", test_matrix_set)) ||
-		(NULL == CU_add_test(pSuite, "Test_matrix_zeros", test_matrix_zeros)) ||
-		(NULL == CU_add_test(pSuite, "Test_matrix_ones", test_matrix_ones))) {
+	if((NULL == CU_add_test(pSuite, "Test matrix initializion", test_matrix_initialize)) || 
+		(NULL == CU_add_test(pSuite, "Test matrix set", test_matrix_set)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix zeros", test_matrix_zeros)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix ones", test_matrix_ones)) ||
+		(NULL == CU_add_test(pSuite, "Test matrix addition", test_matrix_add))) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
@@ -69,7 +80,6 @@ int main() {
 	CU_basic_run_tests();
 	printf("\n");
 	CU_basic_show_failures(CU_get_failure_list());
-	printf("\n\n");
 
 	/* clean up registry and return */
 	CU_cleanup_registry();

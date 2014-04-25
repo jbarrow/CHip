@@ -24,12 +24,15 @@ void c_matrix_set(c_matrix *m, int i, int j, double val);
 
 void zeros(c_matrix* m);
 void ones(c_matrix* m);
-void c_matrix_rand(c_matrix* m);
+void c_matrix_rand(c_matrix* m, double a, double b);
 void c_matrix_dist(c_matrix* m, double (*init)());
 
 void c_matrix_add(const c_matrix* m1, const c_matrix* m2, c_matrix* m);
 void c_matrix_sub(const c_matrix* m1, const c_matrix* m2, c_matrix* m);
 void c_matrix_mul(const c_matrix* m1, const c_matrix* m2, c_matrix* m);
+
+void c_element_mul(const c_matrix *m1, const c_matrix *m2, c_matrix *m);
+void c_element_div(const c_matrix *m1, const c_matrix *m2, c_matrix *m);
 
 void c_scalar_add(const c_matrix* m, double d, c_matrix* m_dest);
 void c_scalar_mul(const c_matrix* m, double d, c_matrix* m_dest);
