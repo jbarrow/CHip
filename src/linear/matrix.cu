@@ -184,3 +184,17 @@ void c_element_div(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	cudaFree( d_b );
 	cudaFree( d_c );
 }
+
+/* Perform the transpose on a matrix */
+extern "C"
+void c_matrix_transpose(const c_matrix *m, c_matrix *m_prime) {
+	if(m_prime->m != m->n || m_prime->n != m->m) {
+		/* The matrices are not aligned */
+		exit(EXIT_FAILURE);
+	}
+
+	int j, i;
+	for(j = 0; j < m->n; ++j)
+		for(i = 0; i < m->m; ++i)
+			m_prime->data[j + i*m->m] = m->data[i + j*m->n];
+}
