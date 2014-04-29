@@ -104,7 +104,7 @@ void c_matrix_add(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
 	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
 
-	cu_matrix_add<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+	cu_matrix_add<<< (m1->m * m1->n + 127)/128, 128 >>>(d_a, d_b, d_c, m1->m * m1->n);
 
 	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
 
@@ -128,7 +128,7 @@ void c_matrix_sub(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
 	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
 
-	cu_matrix_sub<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+	cu_matrix_sub<<< (m1->m * m1->n + 127)/128, 128 >>>(d_a, d_b, d_c, m1->m * m1->n);
 
 	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
 
@@ -152,7 +152,7 @@ void c_element_mul(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
 	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
 
-	cu_element_mul<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+	cu_element_mul<<< (m1->m * m1->n + 127)/128, 128 >>>(d_a, d_b, d_c, m1->m * m1->n);
 
 	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
 
@@ -176,7 +176,7 @@ void c_element_div(const c_matrix *m1, const c_matrix *m2, c_matrix *m) {
 	handle_error( cudaMemcpy(d_a, m1->data, m1->m * m1->n * sizeof(double), cudaMemcpyHostToDevice ) );
 	handle_error( cudaMemcpy(d_b, m2->data, m2->m * m2->n * sizeof(double), cudaMemcpyHostToDevice ) );
 
-	cu_element_div<<< 32, (m1->m * m1->n + 31)/32 >>>(d_a, d_b, d_c, m1->m * m1->n);
+	cu_element_div<<< (m1->m * m1->n + 127)/128, 128 >>>(d_a, d_b, d_c, m1->m * m1->n);
 
 	handle_error( cudaMemcpy(m->data, d_c, m2->m * m2->n * sizeof(double), cudaMemcpyDeviceToHost ) );
 
