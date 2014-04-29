@@ -190,6 +190,7 @@ extern "C"
 void c_matrix_transpose(const c_matrix *m, c_matrix *m_prime) {
 	if(m_prime->m != m->n || m_prime->n != m->m) {
 		/* The matrices are not aligned */
+		fprintf(stderr, "Matrix transpose misalign\n");
 		exit(EXIT_FAILURE);
 	}
 
