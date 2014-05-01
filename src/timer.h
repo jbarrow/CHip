@@ -7,7 +7,7 @@
 struct timeval timerStart;
 
 void start_time() {
-	gettimeofdat(&timerStart, NULL);
+	gettimeofday(&timerStart, NULL);
 }
 
 double get_time() {
