@@ -1,6 +1,5 @@
 CC=clang
 TARGET=chip_test
-UNITY_FILES=unity/unity.c
 FLAGS=-DTEST
 
 all: default
