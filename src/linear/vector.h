@@ -1,9 +1,18 @@
+/*
+ *	Define the implementation for a vector. The Chip linear 
+ *	library treats vectors as matrices. The check_vector
+ *	method is a simple method for determining whether a matrix
+ *	can be considered a vector or not.
+ */
+
 #ifndef VECTOR_H
 #define VECTOR_H
 
 #include "matrix.h"
 
-c_matrix* new_c_vector(int size);
+typedef enum { ROW_VECTOR, COLUMN_VECTOR } vector_t;
+
+c_matrix* new_c_vector(int size, vector_t type);
 void del_c_matrix(c_matrix* m);
 
 double c_vector_get(c_matrix* m, int i);

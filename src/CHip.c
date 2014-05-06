@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "linear/matrix.h"
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+#include "scripting/scripting.h"
 
 /*
  *	The entry point for CHip. Files will be loaded in
@@ -8,12 +11,26 @@
  *	a script/implementation.
  */
 int main(int argc, char** argv) {
-	printf("Welcome to CHip, the C Hippocampus, version 0.0.1.\n");
-	printf("There are a limited subset of commands that allow you\n");
-	printf("to manipulate matrices and neurons.\n\n");
+	int n;
+	for(n = 1; n < argc; ++n) {
+		const char *file = argv[n];
 
-	while(true) {
-		printf("> ");
-		break;
+		lua_State *L = lua_open();   /* opens Lua */
+		luaL_openlibs(L);
+
+		printf("-- Loading file: ");
+		printf(file);
+		printf("\n");
+
+		int s = luaL_loadfile(L, file);
+
+		if( s == 0 ) {
+			s = lua_pcall(L, 0, LUA_MULTRET, 0);
+		}
+
+		report_errors(L, s);
+		lua_close(L);
 	}
+
+	return 0;
 }
