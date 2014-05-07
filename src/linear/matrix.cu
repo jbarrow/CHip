@@ -38,8 +38,11 @@ extern "C"
 double c_matrix_get(c_matrix *m, int i, int j) {
 	/* 	Ideally if we reach this point, we could raise an error;
 	 *	Still trying to figure out how to handle errors in C */
-	if(i > m->n || j > m->m || i < 1 || j < 1)
-		return NULL;
+	if(i > m->n || j > m->m || i < 1 || j < 1) {
+		fprintf(stderr, "*** Linear Error: Attempted to get out of bounds array index.");
+		exit(EXIT_FAILURE);
+	}
+		
 	return m->data[(i-1) * (j-1) + (j-1)];
 }
 

@@ -3,6 +3,7 @@
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
+#include "linear/matrix.h"
 #include "scripting/scripting.h"
 
 /*
@@ -18,9 +19,7 @@ int main(int argc, char** argv) {
 		lua_State *L = lua_open();   /* opens Lua */
 		luaL_openlibs(L);
 
-		printf("-- Loading file: ");
-		printf(file);
-		printf("\n");
+		printf("-- Loading file: %s\n", file);
 
 		int s = luaL_loadfile(L, file);
 
