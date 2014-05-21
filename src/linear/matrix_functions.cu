@@ -31,7 +31,10 @@ __global__ void cu_matrix_add(const double *d_a, const double *d_b, double *d_c,
 }
 
 __global__ void cu_matrix_sub(const double *d_a, const double *d_b, double *d_c, int element_count) {
-    unsigned short tid = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int tid = x * y + x;
+
     while( tid < element_count ) {
         d_c[tid] = d_a[tid] - d_b[tid];
         tid += blockDim.x * gridDim.x;
@@ -39,7 +42,10 @@ __global__ void cu_matrix_sub(const double *d_a, const double *d_b, double *d_c,
 }
 
 __global__ void cu_element_mul(const double *d_a, const double *d_b, double *d_c, int element_count) {
-    unsigned short tid = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int tid = x * y + x;
+
     while( tid < element_count ) {
         d_c[tid] = d_a[tid] * d_b[tid];
         tid += blockDim.x * gridDim.x;
@@ -47,7 +53,10 @@ __global__ void cu_element_mul(const double *d_a, const double *d_b, double *d_c
 }
 
 __global__ void cu_element_div(const double *d_a, const double *d_b, double *d_c, int element_count) {
-    unsigned short tid = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int tid = x * y + x;
+
     while( tid < element_count ) {
         d_c[tid] = d_a[tid] / d_b[tid];
         tid += blockDim.x * gridDim.x;
