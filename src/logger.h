@@ -7,4 +7,6 @@ extern int log_created;
 void push_to_log(char *message);
 void log_error(char *message);
 
+void push_to_log_file(char *message, char *filename);
+
 #endif
