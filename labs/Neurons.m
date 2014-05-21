@@ -4,25 +4,25 @@ function [post_excitation] = post_excite(input_vector, weight_vector)
 end
 
 function check_vector_sizes(vector_one, vector_two, func_name)
-    If length(vector_one) ~= length(vector_two)
+    % Check for vector size equality
+    % This would be trivial to program in C, and I will. I just hadn't
+    %   thought of giving vectors a "length"
+    if length(vector_one) ~= length(vector_two);
         disp('Error in: ' + func_name);
         disp('Dimensions of weights and weight are different');
+    end
 end
 
-function [truth] = check_for_col_vector(input, desired_dim,... func_name)
-    error_found = ['Function checkfor_col_vector has detected an error in', func_name];
-    truth = 1;
-    [numb_rows, numb_cols] = size(input);
+function [neuron_output] = spikegen(threshold, excitation)
+    % Error detection
+    if length(excitation) > 1
+        disp('Function spikegen takes a scalar and not a vector or matrix')
+    end
     
-    if numb_cols ~= 1
-        beep
-        truth = 0;
-        disp(error_found)
-        disp('Not a column vector')
-    elseif numb_rows ~= desired_dim
-        beep
-        truth = 0;
-        disp(errorfound);
-        disp('Column vector is not desired length')
+    % Threshold function
+    if excitation < threshold
+        neuron_output = 0;
+    else
+        neuron_output = 1;
     end
 end
