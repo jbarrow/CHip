@@ -15,7 +15,6 @@
 typedef struct {
 	int n, m; /* Define an n-rows by m-columns matrix */
 	double* data; /* Data stored in row-major form */
-	int stride;
 } c_matrix;
 
 /* c_matrix memory management functions */
